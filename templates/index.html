@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Quality Predictor - AI-Powered Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Predict wine quality using machine learning based on chemical properties">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <span class="wine-icon">🍷</span>
+            <h1>Wine Quality Predictor</h1>
+            <p>AI-powered wine quality analysis based on chemical properties</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-links">
+            <a href="/">🏠 Predict</a>
+            <a href="/train">🎯 Train Model</a>
+        </div>
+
+        <!-- Main Form -->
+        <div class="form-container">
+            {% if error %}
+            <div style="background: #ffe6e6; border: 2px solid #ff4444; border-radius: 10px; padding: 15px; margin-bottom: 20px; color: #cc0000; text-align: center; font-weight: 600;">
+                {{ error }}
+            </div>
+            {% endif %}
+            
+            <form id="predictionForm" action="/predict" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="fixed_acidity">🧪 Fixed Acidity (g/L)</label>
+                        <input type="number" 
+                               name="fixed_acidity" 
+                               id="fixed_acidity" 
+                               step="0.1" 
+                               min="3.8" 
+                               max="15.9"
+                               required>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="volatile_acidity">💨 Volatile Acidity (g/L)</label>
+                        <input type="number" 
+                               name="volatile_acidity" 
+                               id="volatile_acidity" 
+                               step="0.01" 
+                               min="0.08" 
+                               max="1.58"
+                               required>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="citric_acid">🍋 Citric Acid (g/L)</label>
+                        <input type="number" 
+                               name="citric_acid" 
+                               id="citric_acid" 
+                               step="0.01" 
+                               min="0.0" 
+                               max="1.66"
+                               required>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="residual_sugar">🍯 Residual Sugar (g/L)</label>
+                        <input type="number" 
+                               name="residual_sugar" 
+                               id="residual_sugar" 
+                               step="0.1" 
+                               min="0.6" 
+                               max="65.8"
+                               required>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="chlorides">🧂 Chlorides (g/L)</label>
+                        <input type="number" 
+                               name="chlorides" 
+                               id="chlorides" 
+                               step="0.001" 
+                               min="0.009" 
+                               max="0.611"
+                               required>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="free_sulfur_dioxide">🌬️ Free Sulfur Dioxide (mg/L)</label>
+                        <input type="number" 
+                               name="free_sulfur_dioxide" 
+                               id="free_sulfur_dioxide" 
+                               step="1" 
+                               min="1.0" 
+                               max="289.0"
+                               required>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="total_sulfur_dioxide">🌪️ Total Sulfur Dioxide (mg/L)</label>
+                        <input type="number" 
+                               name="total_sulfur_dioxide" 
+                               id="total_sulfur_dioxide" 
+                               step="1" 
+                               min="6.0" 
+                               max="440.0"
+                               required>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="density">⚖️ Density (g/cm³)</label>
+                        <input type="number" 
+                               name="density" 
+                               id="density" 
+                               step="0.00001" 
+                               min="0.98711" 
+                               max="1.03898"
+                               required>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pH">🧪 pH Level</label>
+                        <input type="number" 
+                               name="pH" 
+                               id="pH" 
+                               step="0.01" 
+                               min="2.72" 
+                               max="4.01"
+                               required>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sulphates">⚗️ Sulphates (g/L)</label>
+                        <input type="number" 
+                               name="sulphates" 
+                               id="sulphates" 
+                               step="0.01" 
+                               min="0.22" 
+                               max="2.0"
+                               required>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alcohol">🍺 Alcohol Content (%)</label>
+                        <input type="number" 
+                               name="alcohol" 
+                               id="alcohol" 
+                               step="0.1" 
+                               min="8.0" 
+                               max="15.0"
+                               required>
+                        <div class="error-message"></div>
+                    </div>
+                </div>
+
+                <div class="submit-container">
+                    <button type="submit" class="predict-btn">
+                        🔮 Predict Wine Quality
+                    </button>
+                </div>
+
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing wine properties...</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

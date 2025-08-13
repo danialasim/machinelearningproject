@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Quality Prediction Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <span class="wine-icon">🍷</span>
+            <h1>Prediction Results</h1>
+            <p>Your wine quality analysis is complete</p>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-container">
+            <div class="result-card">
+                <div class="result-label">Predicted Wine Quality Score</div>
+                <div class="result-value" id="qualityScore">{{ "%.2f"|format(prediction|float) }}</div>
+                <div class="quality-indicator" id="qualityIndicator">
+                    <span id="qualityEmoji"></span>
+                    <span id="qualityDescription"></span>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 15px;">
+                    <h3 style="margin-bottom: 15px; font-size: 1.2rem;">Quality Scale Reference:</h3>
+                    <div style="text-align: left; font-size: 0.9rem; line-height: 1.6;">
+                        <div>🍷✨ <strong>7-10:</strong> Excellent Wine</div>
+                        <div>🍷👍 <strong>6-7:</strong> Good Wine</div>
+                        <div>🍷👌 <strong>5-6:</strong> Average Wine</div>
+                        <div>🍷⚠️ <strong>3-5:</strong> Below Average</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <a href="/" class="back-btn">🔄 Make Another Prediction</a>
+                <a href="/train" class="back-btn" style="margin-left: 15px;">🎯 Retrain Model</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the prediction value and update the UI
+        const score = parseFloat(document.getElementById('qualityScore').textContent);
+        const qualityInfo = getQualityDescription(score);
+        
+        document.getElementById('qualityEmoji').textContent = qualityInfo.emoji;
+        document.getElementById('qualityDescription').textContent = qualityInfo.description;
+        document.getElementById('qualityIndicator').style.background = qualityInfo.color;
+        
+        // Add some animation
+        setTimeout(() => {
+            document.getElementById('qualityScore').style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                document.getElementById('qualityScore').style.transform = 'scale(1)';
+            }, 300);
+        }, 500);
+
+        function getQualityDescription(score) {
+            if (score >= 7) {
+                return { 
+                    description: 'Excellent Wine', 
+                    color: 'rgba(39, 174, 96, 0.8)',
+                    emoji: '✨'
+                };
+            } else if (score >= 6) {
+                return { 
+                    description: 'Good Wine', 
+                    color: 'rgba(46, 204, 113, 0.8)',
+                    emoji: '👍'
+                };
+            } else if (score >= 5) {
+                return { 
+                    description: 'Average Wine', 
+                    color: 'rgba(243, 156, 18, 0.8)',
+                    emoji: '👌'
+                };
+            } else {
+                return { 
+                    description: 'Below Average', 
+                    color: 'rgba(231, 76, 60, 0.8)',
+                    emoji: '⚠️'
+                };
+            }
+        }
+    </script>
+</body>
+</html>
